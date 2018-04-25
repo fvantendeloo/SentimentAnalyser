@@ -26,8 +26,6 @@ import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 import scala.Tuple2;
 
-//import org.apache.spark.ml.linalg.Vectors;
-
 
 /**
  * @author Floris Van Tendeloo
@@ -48,6 +46,7 @@ public class NaiveBayesModeller {
         SparkConf conf;
         JavaSparkContext sc;
         String trainingData = args[0];
+        String outputModel = args[1];
         Stemmer stemmer = new Stemmer();
 
         conf = new SparkConf().setAppName("NaiveBayesModeller");
@@ -137,5 +136,9 @@ public class NaiveBayesModeller {
                 test.mapToPair(p -> new Tuple2<>(model.predict(p.features()), p.label()));
         double accuracy = predictionAndLabel.filter(pl -> pl._1.equals(pl._2)).count() / (double) test.count();
         System.out.println("Accuracy = " + accuracy);
+
+        model.save(sc.sc(), outputModel);
+
+        NaiveBayesModel myModel = NaiveBayesModel.load(sc.sc(), outputModel);
     }
 }
