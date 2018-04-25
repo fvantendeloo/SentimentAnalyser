@@ -1,6 +1,7 @@
 package be.kdg;
 
 import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
@@ -8,7 +9,11 @@ import org.apache.spark.ml.feature.HashingTF;
 import org.apache.spark.ml.feature.IDF;
 import org.apache.spark.ml.feature.IDFModel;
 import org.apache.spark.ml.feature.Tokenizer;
-import org.apache.spark.mllib.linalg.Vector;
+import org.apache.spark.mllib.classification.NaiveBayes;
+import org.apache.spark.mllib.classification.NaiveBayesModel;
+
+//import org.apache.spark.ml.linalg.Vectors;
+import org.apache.spark.mllib.linalg.Vectors;
 import org.apache.spark.mllib.regression.LabeledPoint;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -18,15 +23,15 @@ import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
-import scala.Function1;
+import scala.Tuple2;
 
-import java.util.Arrays;
 
 /**
  * @author Floris Van Tendeloo
  */
 public class NaiveBayesModeller {
 
+    @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
         if (args.length < 3 || args.length > 4) {
             System.err.println("Usage: " +
@@ -73,9 +78,9 @@ public class NaiveBayesModeller {
         JavaRDD<Row> words_iterable = emptyStringsRemoved.map(new Function<String, Row>() {
             @Override
             public Row call(String s) throws Exception {
-                if(!s.isEmpty() || s.contains(";")){
+                if (!s.isEmpty() || s.contains(";")) {
                     String[] arr = s.split(";");
-                    Row row = RowFactory.create(Double.parseDouble(arr[0]), arr[1].isEmpty()?"I love Icecream":arr[1]);
+                    Row row = RowFactory.create(Double.parseDouble(arr[0]), arr[1].isEmpty() ? "I love Icecream" : arr[1]);
                     return row;
                 }
                 return RowFactory.create(1.0, "love icecream so much");
@@ -92,7 +97,7 @@ public class NaiveBayesModeller {
         Tokenizer tokenizer = new Tokenizer().setInputCol("sentence").setOutputCol("words");
         Dataset<Row> wordsData = tokenizer.transform(sentenceData);
 
-        int numFeatures = 1000;
+        int numFeatures = 100;
 
         HashingTF hashingTF = new HashingTF()
                 .setInputCol("words")
@@ -106,5 +111,25 @@ public class NaiveBayesModeller {
 
         Dataset<Row> rescaledData = idfModel.transform(featurizedData);
         rescaledData.select("label", "features").show();
+
+        JavaRDD<Row> rescaledRDD = rescaledData.select("label", "features").toJavaRDD();
+
+        JavaRDD<LabeledPoint> labeledPoints = rescaledRDD.map(new Function<Row, LabeledPoint>() {
+            @Override
+            public LabeledPoint call(Row row) throws Exception {
+                System.out.println(row.getAs(1).toString());
+                return new LabeledPoint(row.getDouble(0), Vectors.dense(row.getAs(1)));
+            }
+        });
+
+        JavaRDD<LabeledPoint>[] tmp = labeledPoints.randomSplit(new double[]{0.6, 0.4});
+        JavaRDD<LabeledPoint> training = tmp[0];
+        JavaRDD<LabeledPoint> test = tmp[1];
+
+        NaiveBayesModel model = NaiveBayes.train(training.rdd(), 1.0);
+        JavaPairRDD<Double, Double> predictionAndLabel =
+                test.mapToPair(p -> new Tuple2<>(model.predict(p.features()), p.label()));
+        double accuracy = predictionAndLabel.filter(pl -> pl._1.equals(pl._2)).count() / (double) test.count();
+        System.out.println("Accuracy = " + accuracy);
     }
 }
