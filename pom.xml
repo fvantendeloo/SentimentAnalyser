@@ -107,7 +107,7 @@
 
                     <archive>
                         <manifest>
-                            <mainClass>be.kdg.StartMain</mainClass>
+                            <mainClass>be.kdg.SentimentAnalyser</mainClass>
                         </manifest>
                     </archive>
                     <descriptors>

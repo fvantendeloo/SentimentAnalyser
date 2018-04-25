@@ -1,3 +1,2 @@
-be\kdg\StartMain.class
-be\kdg\StopwordsRemover.class
 be\kdg\Stemmer.class
+be\kdg\StopwordsRemover.class

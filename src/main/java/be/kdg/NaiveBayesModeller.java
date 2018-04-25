@@ -5,26 +5,13 @@ import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
-import org.apache.spark.ml.feature.HashingTF;
-import org.apache.spark.ml.feature.IDF;
-import org.apache.spark.ml.feature.IDFModel;
-import org.apache.spark.ml.feature.Tokenizer;
 import org.apache.spark.mllib.classification.NaiveBayes;
 import org.apache.spark.mllib.classification.NaiveBayesModel;
-import org.apache.spark.mllib.linalg.DenseVector;
-import org.apache.spark.mllib.linalg.SparseVector;
-import org.apache.spark.mllib.linalg.Vector;
+import org.apache.spark.mllib.feature.HashingTF;
 import org.apache.spark.mllib.regression.LabeledPoint;
-import org.apache.spark.mllib.util.MLUtils;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.RowFactory;
-import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.types.DataTypes;
-import org.apache.spark.sql.types.Metadata;
-import org.apache.spark.sql.types.StructField;
-import org.apache.spark.sql.types.StructType;
 import scala.Tuple2;
+import java.util.Arrays;
+
 
 
 /**
@@ -57,8 +44,6 @@ public class NaiveBayesModeller {
 
         sc = new JavaSparkContext(conf);
 
-        SparkSession spark = SparkSession.builder().getOrCreate();
-
         JavaRDD<String> raw = sc.textFile(trainingData, 3);
         JavaRDD<String> cleaned = raw.map(l -> {
             String[] arr = l.split(",");
@@ -77,57 +62,16 @@ public class NaiveBayesModeller {
 
         JavaRDD<String> emptyStringsRemoved = cleaned.filter(s -> !s.isEmpty() && !(s.length() <= 2));
 
-        JavaRDD<Row> words_iterable = emptyStringsRemoved.map(new Function<String, Row>() {
+        HashingTF tf = new HashingTF();
+        JavaRDD<LabeledPoint> points = emptyStringsRemoved.map(new Function<String, LabeledPoint>() {
             @Override
-            public Row call(String s) throws Exception {
-                if (!s.isEmpty() || s.contains(";")) {
-                    String[] arr = s.split(";");
-                    Row row = RowFactory.create(Double.parseDouble(arr[0]), arr[1].isEmpty() ? "I love Icecream" : arr[1]);
-                    return row;
-                }
-                return RowFactory.create(1.0, "love icecream so much");
+            public LabeledPoint call(String s) throws Exception {
+                String[] arr = s.split(";");
+                return new LabeledPoint(Double.parseDouble(arr[0]), tf.transform(Arrays.asList(arr[1].split(" "))));
             }
         });
 
-        StructType schema = new StructType(new StructField[]{
-                new StructField("label", DataTypes.DoubleType, false, Metadata.empty()),
-                new StructField("sentence", DataTypes.StringType, false, Metadata.empty())
-        });
-
-        Dataset<Row> sentenceData = spark.createDataFrame(words_iterable, schema);
-
-        Tokenizer tokenizer = new Tokenizer().setInputCol("sentence").setOutputCol("words");
-        Dataset<Row> wordsData = tokenizer.transform(sentenceData);
-
-        int numFeatures = 100;
-
-        HashingTF hashingTF = new HashingTF()
-                .setInputCol("words")
-                .setOutputCol("rawFeatures")
-                .setNumFeatures(numFeatures);
-
-        Dataset<Row> featurizedData = hashingTF.transform(wordsData);
-
-        IDF idf = new IDF().setInputCol("rawFeatures").setOutputCol("features");
-        IDFModel idfModel = idf.fit(featurizedData);
-
-        Dataset<Row> rescaledData = idfModel.transform(featurizedData);
-        Dataset<Row> convertVecDF = MLUtils.convertVectorColumnsFromML(rescaledData);
-        rescaledData.select("label", "features").show();
-
-        rescaledData.select("label", "features").show();
-
-        // convert ml.linalg.Vector to mllib.linalg.Vector !
-        JavaRDD<Row> rescaledRDD = convertVecDF.select("label", "features").toJavaRDD();
-
-        JavaRDD<LabeledPoint> labeledPoints = rescaledRDD.map(new Function<Row, LabeledPoint>() {
-            @Override
-            public LabeledPoint call(Row row) throws Exception {
-                return new LabeledPoint(row.getDouble(0), row.getAs(1));
-            }
-        });
-
-        JavaRDD<LabeledPoint>[] tmp = labeledPoints.randomSplit(new double[]{0.8, 0.2});
+        JavaRDD<LabeledPoint>[] tmp = points.randomSplit(new double[]{0.8, 0.2});
         JavaRDD<LabeledPoint> training = tmp[0];
         JavaRDD<LabeledPoint> test = tmp[1];
 
@@ -138,7 +82,5 @@ public class NaiveBayesModeller {
         System.out.println("Accuracy = " + accuracy);
 
         model.save(sc.sc(), outputModel);
-
-        NaiveBayesModel myModel = NaiveBayesModel.load(sc.sc(), outputModel);
     }
 }

@@ -1,8 +1,11 @@
 package be.kdg;
 
 import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.function.FlatMapFunction;
+import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.function.Function;
+import org.apache.spark.mllib.classification.NaiveBayesModel;
+import org.apache.spark.mllib.feature.HashingTF;
+import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.streaming.Duration;
 import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaReceiverInputDStream;
@@ -17,23 +20,29 @@ import twitter4j.conf.ConfigurationContext;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StartMain {
+public class SentimentAnalyser {
 
+    @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
-        if (args.length < 2 || args.length > 3) {
-            System.err.println("Usage: output_location batchduration (forceLocal)");
+        if (args.length < 2 || args.length > 4) {
+            System.err.println("Usage: " +
+                    "1 - input Naive Bayes Model " +
+                    "2 - output_location " +
+                    "3 - batchduration " +
+                    "4 - (forceLocal)");
             System.exit(1);
         }
 
         int batchDuration = 30000;
-        String output = args[0];
+        String input = args[0]; // Naive Bayes Model
+        String output = args[1];
 
         if (args[1].matches("\\d+")) {
             batchDuration = Integer.parseInt(args[1]);
         }
 
-        SparkConf conf = new SparkConf().setAppName("TrumpAnalyzer");
-        if (args.length == 3 && args[2].toLowerCase().equals("forcelocal")) {
+        SparkConf conf = new SparkConf().setAppName("SentimentAnalyser");
+        if (args.length == 4 && args[3].toLowerCase().equals("forcelocal")) {
             conf.setMaster("local[2]");
         }
 
@@ -55,9 +64,17 @@ public class StartMain {
         String[] filters = {"#Trump", "#trump"};
         Stemmer stemmer = new Stemmer();
 
+        NaiveBayesModel naiveBayesModel = NaiveBayesModel.load(SparkContext.getOrCreate(), input);
+        if (naiveBayesModel == null) {
+            System.err.println("No Naive Bayes Model found!");
+            System.exit(1);
+        }
+
         JavaReceiverInputDStream<Status> twitterStream = TwitterUtils.createStream(jssc, twitterAuth, filters);
 
         JavaDStream<Status> removeRetweets = twitterStream.filter(status -> !status.isRetweet());
+
+        HashingTF tf = new HashingTF();
 
         JavaDStream<String> statuses = removeRetweets.map(
                 (Function<Status, String>) status -> {
@@ -74,13 +91,16 @@ public class StartMain {
                     text = text.replaceAll("[^\\w\\s\\d]+", "");
                     text = StopwordsRemover.removeStopwords(text);
                     String[] strArray = text.split(" ");
+                    List<String> stemmed = new ArrayList<>();
                     for (String s : strArray) {
                         s.trim();
-                        if(!s.startsWith("http")){
-                            sb.append(stemmer.stem(s));
-                            sb.append(" ");
+                        if (!s.startsWith("http")) {
+                            stemmed.add(stemmer.stem(s));
                         }
                     }
+                    Double sentiment = naiveBayesModel.predict(tf.transform(stemmed));
+                    System.out.println(sentiment);
+                    sb.append(sentiment.intValue());
                     sb.append("\n\n");
                     return sb.toString();
                 }
