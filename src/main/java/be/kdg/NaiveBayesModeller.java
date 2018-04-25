@@ -55,7 +55,8 @@ public class NaiveBayesModeller {
         JavaRDD<String> raw = sc.textFile(trainingData, 3);
         JavaRDD<String> cleaned = raw.map(l -> {
             String[] arr = l.split(",");
-            String punctuationRemoved = arr[3].toLowerCase().replaceAll("[^\\w\\s\\d]+", "");
+            String punctuationRemoved = arr[3].toLowerCase().replaceAll("\\p{Punct}", "");
+
             String stopwordsRemoved = StopwordsRemover.removeStopwords(punctuationRemoved);
             String replaceWhitespaces = stopwordsRemoved.replaceAll("\\s{2,}", " ");
             String result = arr[1] + ";";
@@ -65,22 +66,18 @@ public class NaiveBayesModeller {
                 }
             }
             return result;
-            //add twitter id ?!
-            //return arr[0] + ";" + arr[1] + ";" + replaceWhitespaces;
         });
 
-        cleaned.collect().forEach(System.out::println);
+        //cleaned.collect().forEach(System.out::println);
 
         JavaRDD<Row> words_iterable = cleaned.map(new Function<String, Row>() {
             @Override
             public Row call(String s) throws Exception {
-                if (s.isEmpty()) {
-                    return RowFactory.create(0.0, "");
-                }
+                System.out.println(s);
                 String[] arr = s.split(";");
-                return RowFactory.create(
-                        Double.parseDouble(arr[0]),
-                        arr[1]);
+                Row row = RowFactory.create(Double.parseDouble(arr[0]), arr[1]);
+                System.out.println(row);
+                return row;
             }
         });
 
@@ -94,7 +91,7 @@ public class NaiveBayesModeller {
         Tokenizer tokenizer = new Tokenizer().setInputCol("sentence").setOutputCol("words");
         Dataset<Row> wordsData = tokenizer.transform(sentenceData);
 
-        int numFeatures = 20;
+        int numFeatures = 1000;
 
         HashingTF hashingTF = new HashingTF()
                 .setInputCol("words")
@@ -109,33 +106,6 @@ public class NaiveBayesModeller {
         Dataset<Row> rescaledData = idfModel.transform(featurizedData);
         rescaledData.select("label", "features").show();
 
-        //sentenceData.foreach(l -> System.out.println(l));
-
         //cleaned.collect().forEach(l -> System.out.println(l));
-
-/*        JavaRDD<LabeledPoint> training = featurizedData.map(
-                new Function<String, LabeledPoint>() {
-                    @Override
-                    public LabeledPoint call(String str) throws Exception {
-                        String[] arr = str.split(";");
-                        Iterable<String> rawFeatures = Arrays.asList(arr[1].split(" "));
-                        return new LabeledPoint(
-                                // TODO
-                                Double.parseDouble(arr[0]),
-                                tf.transform(rawFeatures));
-                    }
-                }
-        );*/
-/*        public static class MakeLabledPointRDD implements
-                Function<Row, LabeledPoint> {
-            @Override
-            public LabeledPoint call(Row r) throws Exception {
-                Vector features = r.getAs(0); //keywords in RDD
-                Integer str = r.getInt(1); //id in RDD
-                Double label = (double) str;
-                LabeledPoint lp = new LabeledPoint(label, features);
-                return lp;
-            }
-        }*/
     }
 }
