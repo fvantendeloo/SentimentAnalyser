@@ -11,10 +11,11 @@ import org.apache.spark.ml.feature.IDFModel;
 import org.apache.spark.ml.feature.Tokenizer;
 import org.apache.spark.mllib.classification.NaiveBayes;
 import org.apache.spark.mllib.classification.NaiveBayesModel;
-
-//import org.apache.spark.ml.linalg.Vectors;
-import org.apache.spark.mllib.linalg.Vectors;
+import org.apache.spark.mllib.linalg.DenseVector;
+import org.apache.spark.mllib.linalg.SparseVector;
+import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.regression.LabeledPoint;
+import org.apache.spark.mllib.util.MLUtils;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.RowFactory;
@@ -24,6 +25,8 @@ import org.apache.spark.sql.types.Metadata;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 import scala.Tuple2;
+
+//import org.apache.spark.ml.linalg.Vectors;
 
 
 /**
@@ -110,19 +113,22 @@ public class NaiveBayesModeller {
         IDFModel idfModel = idf.fit(featurizedData);
 
         Dataset<Row> rescaledData = idfModel.transform(featurizedData);
+        Dataset<Row> convertVecDF = MLUtils.convertVectorColumnsFromML(rescaledData);
         rescaledData.select("label", "features").show();
 
-        JavaRDD<Row> rescaledRDD = rescaledData.select("label", "features").toJavaRDD();
+        rescaledData.select("label", "features").show();
+
+        // convert ml.linalg.Vector to mllib.linalg.Vector !
+        JavaRDD<Row> rescaledRDD = convertVecDF.select("label", "features").toJavaRDD();
 
         JavaRDD<LabeledPoint> labeledPoints = rescaledRDD.map(new Function<Row, LabeledPoint>() {
             @Override
             public LabeledPoint call(Row row) throws Exception {
-                System.out.println(row.getAs(1).toString());
-                return new LabeledPoint(row.getDouble(0), Vectors.dense(row.getAs(1)));
+                return new LabeledPoint(row.getDouble(0), row.getAs(1));
             }
         });
 
-        JavaRDD<LabeledPoint>[] tmp = labeledPoints.randomSplit(new double[]{0.6, 0.4});
+        JavaRDD<LabeledPoint>[] tmp = labeledPoints.randomSplit(new double[]{0.8, 0.2});
         JavaRDD<LabeledPoint> training = tmp[0];
         JavaRDD<LabeledPoint> test = tmp[1];
 
