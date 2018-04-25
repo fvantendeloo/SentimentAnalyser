@@ -68,16 +68,17 @@ public class NaiveBayesModeller {
             return result;
         });
 
-        //cleaned.collect().forEach(System.out::println);
+        JavaRDD<String> emptyStringsRemoved = cleaned.filter(s -> !s.isEmpty() && !(s.length() <= 2));
 
-        JavaRDD<Row> words_iterable = cleaned.map(new Function<String, Row>() {
+        JavaRDD<Row> words_iterable = emptyStringsRemoved.map(new Function<String, Row>() {
             @Override
             public Row call(String s) throws Exception {
-                System.out.println(s);
-                String[] arr = s.split(";");
-                Row row = RowFactory.create(Double.parseDouble(arr[0]), arr[1]);
-                System.out.println(row);
-                return row;
+                if(!s.isEmpty() || s.contains(";")){
+                    String[] arr = s.split(";");
+                    Row row = RowFactory.create(Double.parseDouble(arr[0]), arr[1].isEmpty()?"I love Icecream":arr[1]);
+                    return row;
+                }
+                return RowFactory.create(1.0, "love icecream so much");
             }
         });
 
@@ -105,7 +106,5 @@ public class NaiveBayesModeller {
 
         Dataset<Row> rescaledData = idfModel.transform(featurizedData);
         rescaledData.select("label", "features").show();
-
-        //cleaned.collect().forEach(l -> System.out.println(l));
     }
 }
