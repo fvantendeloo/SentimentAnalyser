@@ -82,11 +82,11 @@ public class SentimentAnalyser {
                     sb.append(status.getUser().getScreenName());
                     sb.append("_");
                     sb.append(status.getCreatedAt().toString());
-                    sb.append("\n");
+                    sb.append(";");
                     sb.append(status.getUser().getScreenName());
-                    sb.append("\n");
+                    sb.append(";");
                     sb.append(status.getCreatedAt().toString());
-                    sb.append("\n");
+                    sb.append(";");
                     String text = status.getText().toLowerCase();
                     text = text.replaceAll("[^\\w\\s\\d]+", "");
                     text = StopwordsRemover.removeStopwords(text);
@@ -101,7 +101,6 @@ public class SentimentAnalyser {
                     Double sentiment = naiveBayesModel.predict(tf.transform(stemmed));
                     System.out.println(sentiment);
                     sb.append(sentiment.intValue());
-                    sb.append("\n\n");
                     return sb.toString();
                 }
         );

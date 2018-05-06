@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d93df949-8f01-4401-b148-1e07b03367b0" name="Default" comment="test Sentiment Analyser">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+    <list default="true" id="d93df949-8f01-4401-b148-1e07b03367b0" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/be/kdg/NaiveBayesModeller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/be/kdg/NaiveBayesModeller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/be/kdg/StartMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/be/kdg/SentimentAnalyser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/TrumpAnalyser-1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/TrumpAnalyser-1.0.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/Trump_twitter_analytics.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/be/kdg/NaiveBayesModeller$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/be/kdg/NaiveBayesModeller$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/be/kdg/NaiveBayesModeller.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/be/kdg/NaiveBayesModeller.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/be/kdg/StartMain.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/be/kdg/SentimentAnalyser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/be/kdg/SentimentAnalyser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -42,7 +34,7 @@
       <file leaf-file-name="NaiveBayesModeller.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/be/kdg/NaiveBayesModeller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
+            <state relative-caret-position="198">
               <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
               <folding>
                 <element signature="docComment;class#NaiveBayesModeller#0" />
@@ -54,11 +46,11 @@
       <file leaf-file-name="SentimentAnalyser.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/be/kdg/SentimentAnalyser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="67" column="38" lean-forward="true" selection-start-line="67" selection-start-column="38" selection-end-line="67" selection-end-column="38" />
+            <state relative-caret-position="121">
+              <caret line="102" column="52" selection-start-line="102" selection-start-column="52" selection-end-line="102" selection-end-column="52" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1001#1031#0" expanded="true" />
+                <element signature="e#866#896#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -121,32 +113,17 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-5" />
-    <option name="y" value="158" />
-    <option name="width" value="2791" />
-    <option name="height" value="754" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1382" />
+    <option name="height" value="744" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes>
-      <pane id="AndroidView" />
-      <pane id="PackagesPane" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="SentimentAnalyser" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SentimentAnalyser" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope" />
-    </panes>
+    <panes />
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -287,7 +264,9 @@
       <updated>1523987672695</updated>
       <workItem from="1523987678793" duration="2305000" />
       <workItem from="1524591930553" duration="10196000" />
-      <workItem from="1524636411594" duration="34169000" />
+      <workItem from="1524636411594" duration="34508000" />
+      <workItem from="1524766573911" duration="362000" />
+      <workItem from="1525615447789" duration="548000" />
     </task>
     <task id="LOCAL-00001" summary="Initial">
       <created>1524645312036</created>
@@ -331,14 +310,21 @@
       <option name="project" value="LOCAL" />
       <updated>1524670966614</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Sentiment Analyser &amp; Naive Bayes Modeller -&gt; ok?">
+      <created>1524681158855</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1524681158855</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="46670000" />
+    <option name="totallyTimeSpent" value="47919000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1358" y="-8" width="1456" height="876" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -348,14 +334,14 @@
       <window_info anchor="bottom" id="Java Enterprise" order="7" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
-      <window_info anchor="right" id="Maven Projects" order="3" visible="true" weight="0.3295129" />
+      <window_info anchor="right" id="Maven Projects" order="3" weight="0.3295129" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.38321677" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.57118356" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.52487135" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19054441" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18986385" />
       <window_info anchor="right" id="Bean Validation" order="3" />
       <window_info anchor="right" id="Database" order="3" weight="0.32980332" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.24962178" />
@@ -386,7 +372,8 @@
     <MESSAGE value="ml.linalg.Vector -&gt; converted to mllib.linalg.Vector" />
     <MESSAGE value="save Naive Bayes model" />
     <MESSAGE value="test Sentiment Analyser" />
-    <option name="LAST_COMMIT_MESSAGE" value="test Sentiment Analyser" />
+    <MESSAGE value="Sentiment Analyser &amp; Naive Bayes Modeller -&gt; ok?" />
+    <option name="LAST_COMMIT_MESSAGE" value="Sentiment Analyser &amp; Naive Bayes Modeller -&gt; ok?" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -394,6 +381,48 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main/java/be/kdg/NaiveBayesModeller.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
+          <folding>
+            <element signature="docComment;class#NaiveBayesModeller#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/be/kdg/SentimentAnalyser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="882">
+          <caret line="67" column="38" selection-start-line="67" selection-start-column="38" selection-end-line="67" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#866#896#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/be/kdg/NaiveBayesModeller.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
+          <folding>
+            <element signature="docComment;class#NaiveBayesModeller#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/be/kdg/SentimentAnalyser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1206">
+          <caret line="67" column="38" lean-forward="true" selection-start-line="67" selection-start-column="38" selection-end-line="67" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#866#896#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/be/kdg/SentimentAnalyser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1386">
@@ -418,15 +447,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/be/kdg/StopwordsRemover.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/be/kdg/NaiveBayesModeller.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
@@ -441,15 +461,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
           <caret line="85" lean-forward="true" selection-start-line="85" selection-end-line="85" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/be/kdg/StopwordsRemover.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -476,7 +487,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/be/kdg/NaiveBayesModeller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
+        <state relative-caret-position="198">
           <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
           <folding>
             <element signature="docComment;class#NaiveBayesModeller#0" />
@@ -486,11 +497,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/be/kdg/SentimentAnalyser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="67" column="38" lean-forward="true" selection-start-line="67" selection-start-column="38" selection-end-line="67" selection-end-column="38" />
+        <state relative-caret-position="121">
+          <caret line="102" column="52" selection-start-line="102" selection-start-column="52" selection-end-line="102" selection-end-column="52" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1001#1031#0" expanded="true" />
+            <element signature="e#866#896#0" expanded="true" />
           </folding>
         </state>
       </provider>
