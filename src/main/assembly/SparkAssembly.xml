@@ -21,6 +21,7 @@
                 <!--<include>org.tartarus:snowball</include>-->
                 <!--<include>com.github.master:spark-stemming_2.10</include>-->
                 <include>org.apache.lucene:lucene-analyzers-common</include>
+                <include>org.apache.spark:spark-mllib_2.11</include>
             </includes>
         </dependencySet>
     </dependencySets>
